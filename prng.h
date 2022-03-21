@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <limits.h>
 #include <math.h>
 
@@ -26,7 +27,7 @@ double nextDouble() {
     return ((double) nextRand()) / m;
 }
 
-unsigned int nextBool() {
+bool nextBool() {
     return nextDouble() < 0.5;
 }
 
