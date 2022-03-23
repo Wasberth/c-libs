@@ -34,8 +34,18 @@ typedef struct gen {
 
 // SORTS
 
-void startSelectionSort(ArrayControl array) {
-    int sorted;
+/* Normalmente
+ * g  = 8
+ * s  = 7
+ * ct = 6
+ * wt = 6
+ * ds = 5
+ * 
+*/
+
+void startSelectionSort(ArrayControl array) { // Normalmente 21n^2 + n + 28
+    // T(n) = 1 + n + 2gn^2 + (ds)n^2 + n^2 + ct + s + g + wt
+    int sorted; 
 
     for (int i = 0; i < array.size - 1; i++) { // Para todos los elementos del array
         sorted = i;
@@ -50,7 +60,8 @@ void startSelectionSort(ArrayControl array) {
     }
 }
 
-void startBubbleSort(ArrayControl array) {
+void startBubbleSort(ArrayControl array) { // 51n^2
+    // T(n) = n^2((ds) + 3g + ct + s + wt + 3)
     for (int i = 0; i < array.size - 1; i++) // Para todos los elementos del array
         for (int j = 0; j < array.size - i - 1; j++) // Se compara con todos los demás
             if (array.doSort(array.get(array.vector, j + 1), array.get(array.vector, j))) { // Y si se cumple la condición
@@ -60,7 +71,8 @@ void startBubbleSort(ArrayControl array) {
             }
 }
 
-void startInsertionSort(ArrayControl array) {
+void startInsertionSort(ArrayControl array) { // 16n + 30n^2
+    // T(n) = 4n + ctn + wtn + n^2((ds) + 2g + s + 2)
     for (int i = 1; i < array.size; i++) { // Para todos los elementos del array, excepto el primero
         int j = i - 1;
         array.copyOnTemp(array.vector, i, array.temp);
@@ -74,7 +86,8 @@ void startInsertionSort(ArrayControl array) {
     }
 }
 
-void merge(ArrayControl array, int l, int m, int r) {
+void merge(ArrayControl array, int l, int m, int r) { // 113n + 23
+    // T(n) = 23 + 17n + 7ng + 5ns + n(ds)
     // Imprimir porque tiene error cuando el arreglo tiene tamaño par
     int i, j, k;
     int n1 = m - l + 1;
@@ -118,7 +131,8 @@ void merge(ArrayControl array, int l, int m, int r) {
     free(Rar);
 }
 
-void mergeSort(ArrayControl array, int l, int r) {
+void mergeSort(ArrayControl array, int l, int r) { // (113n + 29)(2^n)
+    // T(n) = (2^n) (6 + T(merge))
     if (l >= r)
         return;
 
@@ -133,7 +147,8 @@ void mergeSort(ArrayControl array, int l, int r) {
     merge(array, l, m, r);
 }
 
-void startMergeSort(ArrayControl array) {
+void startMergeSort(ArrayControl array) { // (113n + 29)(2^n) + 1
+    // T(n) = T(mergeSort) + 1
     mergeSort(array, 0, array.size - 1);
 }
 
@@ -172,7 +187,7 @@ bool intEquals(void* a, void* b) {
     return ((int*) a)[0] == ((int*) b)[0];
 }
 
-ArrayControl Int2Var(int** arr, int size, genOp doSort) {
+ArrayControl Int2Var(int** arr, int size, genOp doSort) { // 15
     void** array = (void**) arr;
     void* temp = malloc(sizeof(int));
 
@@ -183,7 +198,8 @@ ArrayControl Int2Var(int** arr, int size, genOp doSort) {
 
 // SEARCH
 
-int startSecuentialSearch(ArrayControl array, void* searched, genOp equals) {
+int startSecuentialSearch(ArrayControl array, void* searched, genOp equals) { // 3 + 15n
+    // T(n) = 3 + n((ds) + g + 2)
     int found = -1;
 
     for (int i = 0; i < array.size; i++) {
@@ -195,7 +211,8 @@ int startSecuentialSearch(ArrayControl array, void* searched, genOp equals) {
     return found;
 }
 
-int startBinarySearch(ArrayControl array, void* searched, genOp equals) {
+int startBinarySearch(ArrayControl array, void* searched, genOp equals) { // 8 + 17log(n)
+    // 8 + (8 + 2g + 2ds)log(n)
     int i = 0, j = array.size - 1;
     int found = -1;
 
